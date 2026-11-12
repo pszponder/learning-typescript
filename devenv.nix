@@ -41,7 +41,7 @@ in
   enterShell = ''
     hello         # Run scripts directly
     git --version # Use packages
-    bun --version
+    echo "bun version $(bun --version)"
   '';
 
   # https://devenv.sh/tasks/
