@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lesson 01 · A guess with three outcomes</title><script src="../assets/theme.js"></script><link rel="stylesheet" href="../assets/course.css"><script src="../assets/quiz.js" defer></script><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/vendor/highlightjs/highlight.min.js" defer></script><script src="../assets/highlight.js" defer></script></head>
+<body><header><p class="eyebrow">01 / Guess the Number / About 10 minutes</p><h1>A guess with three outcomes</h1><p>Write the rule that a future game API will call. Your win: a function whose result can only be one of three allowed strings.</p></header>
+<h2>Read a small contract</h2>
+<pre><code class="language-typescript">type Turn = "again" | "finished";
+
+function nextTurn(lives: number): Turn {
+  if (lives &gt; 0) {
+    return "again";
+  }
+  return "finished";
+}</code></pre>
+<p><code>function</code> introduces the function; braces delimit its body. The parameter annotation follows <code>lives</code>; the return annotation follows <code>)</code>. <code>Turn</code> names a union of two string literals. Returning <code>"done"</code> would violate it. See the <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#functions">function</a> and <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types">literal-type</a> documentation.</p>
+<aside><strong>Backend connection.</strong> A small explicit set of outcomes helps callers handle business rules. But annotations are erased: incoming HTTP data still needs runtime validation. <a href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types">Why types are not runtime guards</a>.</aside>
+<h2>Predict before running</h2>
+<form data-quiz><fieldset><legend>Which return value violates the declared Turn type?</legend>
+<label><input type="radio" name="outcome" data-feedback="Try again: again is one of the two permitted literals."> <code>"again"</code></label>
+<label><input type="radio" name="outcome" data-feedback="Correct. done is not in the declared union; the checker flags it."> <code>"done"</code></label>
+<label><input type="radio" name="outcome" data-feedback="Try again: finished is explicitly included in Turn."> <code>"finished"</code></label>
+</fieldset><button type="submit">Check prediction</button><p role="status" aria-live="polite"></p></form>
+<noscript><p>Answer: <code>"done"</code> is not a member of Turn.</p></noscript>
+<h2>Your turn: implement the rule</h2>
+<p>Open the <a href="https://www.typescriptlang.org/play/">TypeScript Playground</a> and replace its contents with this starter. Fill in the body. For now assume both inputs are finite integers; input validation comes later.</p>
+<pre><code class="language-typescript">type GuessResult = "too-low" | "correct" | "too-high";
+
+function judgeGuess(guess: number, secret: number): GuessResult {
+  // Your code here.
+}
+
+console.log(judgeGuess(3, 7));  // expected: "too-low"
+console.log(judgeGuess(7, 7));  // expected: "correct"
+console.log(judgeGuess(9, 7));  // expected: "too-high"</code></pre>
+<p>The incomplete body will initially show a type error. Implement it, check the editor diagnostics, then run the code and compare all three outputs. Add one case of your own.</p>
+<details><summary>Hint if you need it</summary><p>Use an <code>if</code> branch for <code>guess &lt; secret</code>, another for <code>guess &gt; secret</code>, and return the remaining result after those branches.</p></details>
+<p>Then deliberately return <code>"winner"</code> in one branch. Read the diagnostic and undo that change. Separately try calling <code>judgeGuess("7", 7)</code>. Explain the error before removing that call.</p>
+<h2>Recall and get feedback</h2>
+<p>Hide the example and recreate the signature from memory. Send your implementation to the agent for review, plus your answer: would this signature alone validate a guess arriving in JSON?</p>
+<p>Tomorrow, reproduce the function without notes. At the next session, we will revisit one part you found difficult.</p>
+<footer><p>Primary reading: <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types">Handbook · Literal Types</a> (just this section).</p><nav><a href="../reference/function-contracts.html">Function contracts reference</a></nav><p>Ask the agent about anything unclear, including unfamiliar JavaScript syntax. Your attempt determines the next lesson.</p></footer>
+</body></html>

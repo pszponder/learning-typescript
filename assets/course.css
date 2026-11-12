@@ -1,0 +1,28 @@
+/* Catppuccin Latte (light) and Mocha (dark), with mauve accents.
+   Palette: https://github.com/catppuccin/palette
+   Print uses Latte on white paper. */
+:root { color-scheme: light; --text: #4c4f69; --page: #eff1f5; --accent: #8839ef; --muted: #5c5f77; --link: #1e66f5; --code: #e6e9ef; --border: #9ca0b0; --button-text: #eff1f5; --focus: #8839ef; font-family: Georgia, serif; color: var(--text); background: var(--page); line-height: 1.65; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; --text: #cdd6f4; --page: #1e1e2e; --accent: #cba6f7; --muted: #bac2de; --link: #89b4fa; --code: #181825; --border: #6c7086; --button-text: #1e1e2e; --focus: #f9e2af; }
+}
+:root[data-theme="dark"] { color-scheme: dark; --text: #cdd6f4; --page: #1e1e2e; --accent: #cba6f7; --muted: #bac2de; --link: #89b4fa; --code: #181825; --border: #6c7086; --button-text: #1e1e2e; --focus: #f9e2af; }
+body { max-width: 780px; margin: auto; padding: 3rem 1.3rem 5rem; }
+header { border-top: 5px solid var(--accent); padding-top: 1rem; }
+h1, h2, nav, .eyebrow, button { font-family: system-ui, sans-serif; }
+h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; letter-spacing: -.04em; }
+h2 { margin-top: 2rem; font-size: 1.25rem; }
+.eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; color: var(--muted); }
+a { color: var(--link); text-underline-offset: .2em; }
+pre { padding: 1.2rem; background: var(--code); overflow-x: auto; border-left: 3px solid var(--accent); line-height: 1.5; }
+code { font-family: ui-monospace, monospace; font-size: .9em; }
+aside, fieldset { padding: 1rem; border: 1px solid var(--border); margin: 1.5rem 0; }
+label { display: block; padding: .3rem; cursor: pointer; }
+button { background: var(--accent); color: var(--button-text); border: 0; padding: .6rem 1rem; border-radius: .2rem; cursor: pointer; }
+button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.theme-controls { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+summary { cursor: pointer; font-weight: bold; }
+footer { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+@media print {
+  :root, :root[data-theme] { color-scheme: light; --text: #4c4f69; --page: #fff; --accent: #8839ef; --muted: #5c5f77; --link: #1e66f5; --code: #e6e9ef; --border: #9ca0b0; }
+  body { max-width: none; padding: 0; } button, .theme-controls { display: none; } pre, fieldset { break-inside: avoid; }
+}

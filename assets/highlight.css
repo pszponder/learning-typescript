@@ -1,0 +1,35 @@
+/* Highlight.js token colors from Catppuccin Latte and Mocha. */
+:root {
+  --syntax-string: #40a02b;
+  --syntax-number: #fe640b;
+  --syntax-type: #df8e1d;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --syntax-string: #a6e3a1;
+    --syntax-number: #fab387;
+    --syntax-type: #f9e2af;
+  }
+}
+:root[data-theme="dark"] {
+  --syntax-string: #a6e3a1;
+  --syntax-number: #fab387;
+  --syntax-type: #f9e2af;
+}
+.hljs { color: var(--text); }
+.hljs-comment, .hljs-quote { color: var(--muted); font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal { color: var(--accent); }
+.hljs-string, .hljs-regexp, .hljs-addition { color: var(--syntax-string); }
+.hljs-number, .hljs-symbol, .hljs-bullet { color: var(--syntax-number); }
+.hljs-title, .hljs-section, .hljs-attr { color: var(--link); }
+.hljs-built_in, .hljs-type, .hljs-title.class_ { color: var(--syntax-type); }
+.hljs-meta { color: var(--accent); }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: bold; }
+@media print {
+  :root, :root[data-theme] {
+    --syntax-string: #40a02b;
+    --syntax-number: #fe640b;
+    --syntax-type: #df8e1d;
+  }
+}

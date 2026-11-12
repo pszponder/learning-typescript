@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Reference · Function contracts</title><script src="../assets/theme.js"></script><link rel="stylesheet" href="../assets/course.css"><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/vendor/highlightjs/highlight.min.js" defer></script><script src="../assets/highlight.js" defer></script></head>
+<body><header><p class="eyebrow">TypeScript / Desk reference 01</p><h1>Function contracts</h1></header>
+<pre><code class="language-typescript">type Turn = "again" | "finished";
+
+function nextTurn(lives: number): Turn {
+  if (lives &gt; 0) {
+    return "again";
+  }
+  return "finished";
+}</code></pre>
+<p>A parameter annotation follows its name. A return annotation follows the parameter list. A literal union limits a value to listed alternatives. <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types">Handbook: literal types</a>.</p>
+<p>Type annotations disappear at runtime. They do not validate incoming JSON. <a href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html#erased-types">Handbook: erased types</a>.</p>
+<aside>Reading aid, not yet evidence of mastery. Explain these ideas in your own words after completing the exercise.</aside>
+<footer><a href="../lessons/0001-guess-result.html">Lesson 01 · A guess with three outcomes</a></footer></body></html>
