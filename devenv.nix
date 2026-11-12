@@ -16,7 +16,7 @@ in
   # https://devenv.sh/packages/
   packages = [
     pkgs.git
-    llm-agents.codex
+    # llm-agents.codex
   ];
 
   # https://devenv.sh/languages/
