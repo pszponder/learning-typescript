@@ -11,19 +11,21 @@ let
 in
 {
   # https://devenv.sh/basics/
-  env.GREET = "Learning TypeScript";
+  env.GREET = "Learning JavaScript/TypeScript";
 
   # https://devenv.sh/packages/
   packages = [
     pkgs.git
+    (pkgs.callPackage ./nix/nub-bin.nix { })
     # llm-agents.codex
   ];
 
   # https://devenv.sh/languages/
   languages.javascript.enable = true;
-  languages.javascript.nodejs.enable = false;
+  languages.javascript.nodejs.enable = true;
   languages.javascript.lsp.enable = false; # TypeScript provides the language server.
-  languages.javascript.bun.enable = true;
+  languages.javascript.bun.enable = false;
+  env.NODE_EXECUTABLE = lib.getExe config.languages.javascript.package;
   languages.typescript.enable = true;
 
   # https://devenv.sh/processes/
@@ -41,7 +43,7 @@ in
   enterShell = ''
     hello         # Run scripts directly
     git --version # Use packages
-    echo "bun version $(bun --version)"
+    echo "nub version $(nub --version)"
   '';
 
   # https://devenv.sh/tasks/

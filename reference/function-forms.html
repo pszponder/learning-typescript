@@ -1,21 +1,7 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Reference · Function forms</title><script src="../assets/theme.js"></script><link rel="stylesheet" href="../assets/course.css"><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/vendor/highlightjs/highlight.min.js" defer></script><script src="../assets/highlight.js" defer></script><script src="../assets/copy-code.js" defer></script><script src="../assets/quiz.js" defer></script></head><body><header><p class="eyebrow">TypeScript / Desk reference 02</p><h1>Ternaries &amp; function forms</h1></header><pre><code class="language-typescript">type Turn = "again" | "finished";
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Reference · Function forms</title><script src="../assets/theme.js"></script><link rel="stylesheet" href="../assets/course.css"><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/vendor/highlightjs/highlight.min.js" defer></script><script src="../assets/highlight.js" defer></script><script src="../assets/copy-code.js" defer></script><script src="../assets/quiz.js" defer></script></head><body><header><p class="eyebrow">Reference / JavaScript &amp; TypeScript foundations / About 10 minutes</p><h1>Function forms</h1><p>Syntax for declarations, function expressions, arrows, and function types.</p></header><pre><code class="language-typescript">function addLife(lives: number): number { return lives + 1; }
+const expression = function (lives: number): number { return lives + 1; };
+const block = (lives: number): number =&gt; { return lives + 1; };
+const concise = (lives: number): number =&gt; lives + 1;
 
-// Function declaration
-function nextTurn(lives: number): Turn {
-  return lives &gt; 0 ? "again" : "finished";
-}
-
-// Function expression assigned to a const
-const nextTurnExpression = function (lives: number): Turn {
-  return lives &gt; 0 ? "again" : "finished";
-};
-
-// Arrow function with a block body
-const nextTurnArrow = (lives: number): Turn =&gt; {
-  return lives &gt; 0 ? "again" : "finished";
-};
-
-// Arrow function with an expression body (implicit return)
-const nextTurnShort = (lives: number): Turn =&gt;
-  lives &gt; 0 ? "again" : "finished";</code></pre><p>A ternary chooses a value: <code>condition ? whenTrue : whenFalse</code>. Python writes <code>whenTrue if condition else whenFalse</code>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator">Conditional operator</a>.</p><p>Expression bodies return implicitly; block bodies need return to return a value. Arrows capture surrounding this. Initialize a const function before calling it. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">Arrow function reference</a>.</p><p>A separate function type uses an arrow for the return type:</p><pre><code class="language-typescript">type TurnRule = (lives: number) =&gt; Turn;
-const next: TurnRule = (lives) =&gt; lives &gt; 0 ? "again" : "finished";</code></pre><p>The alias supplies parameter and return types. <a href="https://www.typescriptlang.org/docs/handbook/2/functions.html#function-type-expressions">Handbook: function type expressions</a>.</p><footer><nav><a href="../lessons/0002-function-forms.html">Lesson 02</a> · <a href="function-contracts.html">Function contracts</a></nav></footer></body></html>
+type LifeRule = (lives: number) =&gt; number;
+const rule: LifeRule = (lives) =&gt; lives + 1;</code></pre><p>A function type describes a value; an arrow expression creates one. Const prevents rebinding. Expression bodies return implicitly; blocks need return to return a value. A const function must be initialized before calling it. Arrows capture surrounding this. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">Arrow reference</a> · <a href="https://www.typescriptlang.org/docs/handbook/2/functions.html#function-type-expressions">Function types</a>.</p><p>Ternaries belong in the <a href="control-flow.html">control-flow reference</a>.</p></body></html>

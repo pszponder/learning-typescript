@@ -20,19 +20,42 @@
   Maintained language reference for branching, switch, and exceptions.
 - [MDN: Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration)
   Use for for...of, for...in, loop conditions, break, and continue.
-- [Bun: TypeScript](https://bun.sh/docs/typescript), [watch mode](https://bun.sh/docs/runtime/watch-mode), and [bundler](https://bun.sh/docs/bundler)
-  Primary runtime sources for separating transpilation, checking, restarting, and artifact creation.
+- [Nub: Runtime](https://nubjs.com/docs/runtime), [scripts](https://nubjs.com/docs/run), and [dependencies](https://nubjs.com/docs/install)
+  Primary sources for TypeScript execution on Node, watch mode, package scripts, and lockfile installs.
 - [TypeScript: TSConfig reference](https://www.typescriptlang.org/tsconfig/)
   Primary source for strict options and module configuration.
-- [Bun: Install](https://bun.sh/docs/pm/cli/install), [tests](https://bun.sh/docs/test), and [HTTP server](https://bun.sh/docs/runtime/http/server)
-  Primary sources for lockfile installs, test execution, and the upcoming server lifecycle lessons.
+- [Node.js: Test runner](https://nodejs.org/api/test.html) and [HTTP](https://nodejs.org/api/http.html)
+  Primary sources for compiled game-rule tests and upcoming server lifecycle lessons.
 - [Node.js: Running TypeScript natively](https://nodejs.org/learn/typescript/run-natively)
   Primary source for the alternative runtime's TypeScript constraints; use when comparing deployment workflows.
 
-- [Bun: Init](https://bun.sh/docs/runtime/templating/init)
-  Primary reference for scaffolding a Bun package and recommended TypeScript defaults.
+- [Nub: Init](https://nubjs.com/docs/init)
+  Primary reference for generating package metadata before adding Nub scripts and TypeScript configuration.
 - [Vite+: Create](https://viteplus.dev/guide/create), [Check](https://viteplus.dev/guide/check), and [Run](https://viteplus.dev/guide/run)
   Primary references for integrated project scaffolding and tooling; distinguish built-in tools from custom backend tasks.
+
+- [TypeScript: Modules](https://www.typescriptlang.org/docs/handbook/2/modules.html) and [MDN: Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+  Primary TypeScript and maintained JavaScript references for imports, exports, module scope, and type-only imports.
+- [MDN: Async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) and [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
+  Use for promise values, execution order, awaited errors, and later concurrency exercises.
+
+- [MDN: Grammar and types](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types), [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), and [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring)
+  Sources for binding scope, list operations, unpacking, defaults, rest, and shallow copies.
+- [TypeScript: Object types](https://www.typescriptlang.org/docs/handbook/2/objects.html)
+  Primary reference for optional fields, readonly properties, arrays, and tuples.
+- [MDN: Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) and [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
+  Sources for dynamic lookup, unique membership, insertion order, and object identity.
+
+- [TypeScript: Classes](https://www.typescriptlang.org/docs/handbook/2/classes.html), [Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html), and [Record](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)
+  Primary references for instances, reusable type parameters, and dictionary object shapes.
+- [MDN: Object.freeze](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
+  Source for shallow runtime freezing and its limits; distinguish it from readonly collection views.
+
+- [MDN: Array splice](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice), [indexOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf), [Object.hasOwn](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn), and [Object.entries](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)
+  Sources for indexed edits, missing-search guards, own-property presence, and enumeration practice.
+
+- [MDN: Array.fill](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill), [Array.from](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from), and [Optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)
+  Sources for shared-row pitfalls, independently created rows, and safe nested reads.
 
 ## Wisdom (Communities)
 

@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lesson 15 · Await a result</title><script src="../assets/theme.js"></script><link rel="stylesheet" href="../assets/course.css"><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/vendor/highlightjs/highlight.min.js" defer></script><script src="../assets/highlight.js" defer></script><script src="../assets/copy-code.js" defer></script><script src="../assets/quiz.js" defer></script></head><body><header><p class="eyebrow">15 / JavaScript &amp; TypeScript foundations / About 10 minutes</p><h1>Await a result</h1><p>Your win: consume a promise and handle a failure without losing it.</p></header><p>A backend frequently waits for I/O. A Promise represents an eventual fulfillment value or rejection. An async function always returns a promise; await waits for its settlement within the async function, without blocking the JavaScript thread while waiting. Async does not turn CPU work into background work. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">Async functions</a>.</p><pre><code class="language-typescript">async function loadSecret(): Promise&lt;number&gt; {
+  return 7;
+}
+
+async function main(): Promise&lt;void&gt; {
+  console.log(&quot;before&quot;);
+  const secret = await loadSecret();
+  console.log(secret);
+}
+
+main().catch((error: unknown) =&gt; {
+  console.error(error);
+});
+console.log(&quot;outside&quot;);</code></pre><p>The example uses a ready value to isolate ordering; it does not simulate real I/O latency. Unlike calling a Python async function, calling a JavaScript async function immediately starts its body, up to the first suspension. Await resumes later, even for an already fulfilled promise.</p><form data-quiz><fieldset><legend>In what order do the three logs appear?</legend><label><input type="radio" name="answer" data-feedback="Try again. main starts immediately, suspends at await, then outside prints before main resumes."> <code>before 7 outside</code></label><label><input type="radio" name="answer" data-feedback="Correct. main starts immediately, suspends at await, then outside prints before main resumes."> <code>before outside 7</code></label><label><input type="radio" name="answer" data-feedback="Try again. main starts immediately, suspends at await, then outside prints before main resumes."> <code>outside before 7</code></label></fieldset><button type="submit">Check prediction</button><p role="status" aria-live="polite"></p></form><noscript><p>Answer: before outside 7. main starts immediately, suspends at await, then outside prints before main resumes.</p></noscript><section class="worked-example" id="worked-example"><h2>Worked example: follow the values</h2><p>Read this as a separate small program. Predict its output before opening the explanation.</p><pre><code class="language-typescript">async function readPoints(fail: boolean): Promise&lt;number&gt; {
+  if (fail) throw new Error(&quot;offline&quot;);
+  return 4;
+}
+async function attempt(fail: boolean): Promise&lt;void&gt; {
+  try {
+    console.log(&quot;score&quot;, await readPoints(fail));
+  } catch (error: unknown) {
+    console.log(error instanceof Error ? error.message : &quot;unknown&quot;);
+  } finally {
+    console.log(&quot;finished&quot;);
+  }
+}
+async function demo(): Promise&lt;void&gt; {
+  await attempt(false);
+  await attempt(true);
+}
+demo().catch((error: unknown) =&gt; console.error(error));</code></pre><details><summary>Reveal the output and walkthrough</summary><pre><code class="language-plaintext">score 4
+finished
+offline
+finished</code></pre><ol><li>readPoints returns a Promise on both paths: fulfilled with 4 or rejected with an Error.</li><li>await turns the rejection into a throw inside the try, so catch prints offline.</li><li>finally runs once per attempt; awaiting attempts in order keeps the output sequential.</li></ol></details><p>Source for this example’s behavior: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">official or maintained reference</a>.</p></section><h2>Handle rejected work</h2><pre><code class="language-typescript">async function loadSecret(): Promise&lt;number&gt; {
+  throw new Error(&quot;Secret unavailable&quot;);
+}
+
+async function main(): Promise&lt;void&gt; {
+  try {
+    const secret = await loadSecret();
+    console.log(secret);
+  } catch (error: unknown) {
+    console.error(error instanceof Error ? error.message : &quot;Unknown failure&quot;);
+  } finally {
+    console.log(&quot;attempt finished&quot;);
+  }
+}
+
+main().catch((error: unknown) =&gt; console.error(error));</code></pre><p>Throwing inside async rejects its promise. Await turns rejection into an exception you can catch. Finally runs after success or failure; reserve it for cleanup, and avoid returning from it. Calling a promise-returning function without await inside try does not catch a later rejection. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">Using promises</a>.</p><h2>Your turn</h2><p>Create <code>exercises/0006-async/main.ts</code> and <code>secret.ts</code>. In secret.ts, write and export <code>loadSecret(fail: boolean): Promise&lt;number&gt;</code>: make it async, return 7 normally, and throw an Error when fail is true. In main.ts, import it and your earlier judgeGuess. Await the secret before judging a guess; catch and print a useful failure message. Invoke a success attempt and a failure attempt sequentially inside an async main function, with a final catch at the entry point.</p><pre><code class="language-bash">tsc --noEmit --strict --target ES2022 --module preserve --moduleResolution bundler exercises/0006-async/main.ts
+nub exercises/0006-async/main.ts</code></pre><p>Use guess 3: expect too-low, followed by your failure message. Predict the order before running. Then temporarily remove await inside the try: observe the type error where a Promise is passed as a number, and restore it. Do not execute the deliberately broken version.</p><aside>Later: use awaited for...of when operations depend on each other; use Promise.all for independent work that can run concurrently. forEach does not await promises from async callbacks. Promise.all rejects if an input rejects, but does not cancel the remaining work. We will practice concurrency separately.</aside><p>Primary reading: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">MDN: using promises</a>. Tomorrow, explain why Promise&lt;number&gt; is not a number.</p><details class="practice-ladder" id="extra-practice"><summary>More practice: predict → modify → implement</summary><p>Use this as a separate 15–25 minute session. Keep the original lesson exercise as your first small win. Put additional work in <code>exercises/practice/0015-async.ts</code> unless the task specifies a directory. Create the practice directory first. Do not overwrite your earlier attempt.</p><h3>1. Trace before running</h3><p>Write each expected log line for the worked example. For every assignment, return, or collection update, explain what changes and what stays the same. Compare with the hidden walkthrough only after committing to a prediction.</p><h3>2. Change one thing</h3><p>Print started just before calling demo, and scheduled immediately after it returns its Promise. Predict where scheduled appears.</p><details><summary>Check your prediction</summary><p>started and scheduled appear before score 4, because the first await suspends before the successful result is logged.</p></details><h3>3. Implement a related rule</h3><p>Write loadName(fail: boolean): Promise&lt;string&gt; returning Ada or rejecting with Error(&quot;offline&quot;). Write safeName that awaits it and returns Guest on rejection. Run the success and failure calls sequentially.</p><div class="table-scroll"><table><thead><tr><th>Input or situation</th><th>Expected result</th></tr></thead><tbody><tr><td>false</td><td>Ada</td></tr><tr><td>true</td><td>Guest</td></tr><tr><td>false after a failed call</td><td>Ada</td></tr></tbody></table></div><details><summary>Hint 1: choose an approach</summary><p>Catch around await, not merely around the creation of the Promise. Keep a final rejection handler on the entry point.</p></details><details><summary>Hint 2: check your reasoning</summary><p>Trace the smallest case first, then a boundary case from the table. Check the return type, missing-value path, and whether input data is supposed to change. Keep one example call per row so a regression is visible.</p></details><h3>Check and explain</h3><p>Run the checker before execution. For a standalone practice file:</p><pre><code class="language-bash">tsc --noEmit --strict --noUncheckedIndexedAccess --target ES2022 --module preserve --moduleResolution bundler exercises/practice/0015-async.ts
+nub exercises/practice/0015-async.ts</code></pre><p>If Nub is missing from your shell, prefix its command with <code>devenv shell --</code>. Compare actual values with every table row, then add one edge case of your own. Ask the agent to review your code and your explanation. Tomorrow, recreate the rule without looking at today’s implementation.</p></details><footer><nav><a href="index.html">Course map</a> · <a href="0014-modules.html">Previous: Modules</a> · <a href="0016-project-lifecycle.html">Next: Project lifecycle</a> · <a href="../reference/modeling-and-immutability.html">Modeling reference</a> · <a href="../reference/variables-and-collections.html">Variables and collections</a></nav><p>Ask the agent about anything unclear. Request a review of your local attempt. Tomorrow, repeat one small task without notes.</p></footer></body></html>

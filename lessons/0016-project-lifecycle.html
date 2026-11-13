@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lesson 16 · Check, build, watch, run</title><script src="../assets/theme.js"></script><link rel="stylesheet" href="../assets/course.css"><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/vendor/highlightjs/highlight.min.js" defer></script><script src="../assets/highlight.js" defer></script><script src="../assets/copy-code.js" defer></script><script src="../assets/quiz.js" defer></script></head><body>
+<header><p class="eyebrow">16 / Backend foundations / About 15 minutes</p><h1>Check, build, watch, run</h1><p>Your win: create a small project and distinguish source execution from a built artifact.</p></header>
+<p>Our environment supplies Nub, Node.js, and TypeScript. Nub runs TypeScript on Node with transpilation and resolution helpers; keep type checking as a separate step. NODE_EXECUTABLE selects the Nix-provided Node. <a href="https://nubjs.com/docs/runtime">Nub runtime</a>.</p>
+<h2>Four separate jobs</h2><ul><li><strong>Typecheck:</strong> check types without emitting files.</li><li><strong>Build:</strong> emit JavaScript into dist.</li><li><strong>Run:</strong> execute source or an existing artifact.</li><li><strong>Watch:</strong> repeat an operation after changes.</li></ul>
+<h2>1. Initialize, then inspect</h2><p>From the repository root, use Nub's initializer to generate package.json, tsconfig.json, an entry point, and development dependencies. Skip nested git initialization inside this teaching repository. <a href="https://nubjs.com/docs/init">Nub init</a>.</p>
+<pre><code class="language-bash">mkdir -p projects/game-backend
+cd projects/game-backend
+nub init -y --no-git
+mkdir -p src tests</code></pre>
+<p>Inspect the generated files and preserve their dependencies and package-manager pin. Move index.ts into src/index.ts and adapt the metadata and scripts:</p>
+<pre><code class="language-json">{
+  "name": "game-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nub watch src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/src/index.js",
+    "test": "nub run build &amp;&amp; node --test dist/tests/rules.test.js",
+    "check": "nub run typecheck &amp;&amp; nub run test"
+  }
+}</code></pre>
+<p>Commit package.json and the generated nub.lock. Use <code>nub ci</code> for a frozen installation in CI. Commit devenv.lock to record environment inputs; record <code>nub --version</code> and <code>node --version</code> when matching deployment tools. <a href="https://nubjs.com/docs/install">Nub dependencies</a>.</p>
+<h2>2. Configure an emitted-JavaScript project</h2><p>Replace the generated tsconfig.json with this configuration: it enables emission for our build instead of the scaffold’s noEmit setup. This build emits files separately; it does not bundle them.</p>
+<pre><code class="language-json">{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": ".",
+    "outDir": "dist",
+    "strict": true,
+    "noEmitOnError": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "verbatimModuleSyntax": true,
+    "sourceMap": true,
+    "types": ["node"],
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
+}</code></pre>
+<p>NodeNext follows Node's module rules. With type: module, use <code>"./rules.js"</code> in TypeScript imports: the checker finds rules.ts while the emitted import points to rules.js. Nub supports TypeScript-friendly resolution for source execution. rootDir preserves src and tests beneath dist. noEmitOnError prevents emission on compiler errors. <a href="https://www.typescriptlang.org/docs/handbook/modules/reference.html#node16-nodenext">TypeScript module modes</a> · <a href="https://www.typescriptlang.org/tsconfig/">TSConfig reference</a>.</p>
+<h2>3. Write your entry point and tests</h2><p>Copy your judgeGuess implementation into src/rules.ts and export it. Remove demonstration logs. In src/index.ts import it from <code>"./rules.js"</code>, call it, and log the result.</p>
+<p>Create tests/rules.test.ts. Import your rule from <code>"../src/rules.js"</code> and write one assertion for each outcome. Use this small test pattern, replacing the arithmetic assertion with your own:</p>
+<pre><code class="language-typescript">import { test } from "node:test";
+import { strict as assert } from "node:assert";
+
+test("example assertion", () =&gt; {
+  assert.equal(2 + 2, 4);
+});</code></pre>
+<p>Tests run against the emitted JavaScript using <a href="https://nodejs.org/api/test.html">Node's test runner</a>. Keep game-rule code learner-owned; ask the agent to review your attempt.</p>
+<h2>4. Observe the feedback loop</h2><ol><li>Run <code>nub run check</code>. Checking, compilation, and tests should pass.</li><li>Run <code>nub run start</code>. The built entry point prints your result, then exits.</li><li>Run <code>nub run dev</code> and, in a second terminal in the same package, <code>nub run typecheck:watch</code>. Change a log message. Execution restarts while checking runs independently. Stop both with Ctrl+C.</li><li>Run start without rebuilding: it prints the old artifact's message. Run build, then start: the message changes.</li><li>Pass a string to a numeric parameter temporarily. Observe the checker error, then restore the valid call.</li></ol>
+<p><code>nub watch</code> restarts source execution; it does not update dist or replace tsc. <a href="https://nubjs.com/docs/runtime">Runtime and watch documentation</a>.</p>
+<form data-quiz><fieldset><legend>Which command updates dist after a source edit?</legend><label><input type="radio" name="answer" data-feedback="Try again. Start executes the existing artifact."> <code>nub run start</code></label><label><input type="radio" name="answer" data-feedback="Correct. Build emits the JavaScript artifact."> <code>nub run build</code></label><label><input type="radio" name="answer" data-feedback="Try again. Typecheck emits no files."> <code>nub run typecheck</code></label></fieldset><button type="submit">Check prediction</button><p role="status" aria-live="polite"></p></form><noscript><p>Answer: nub run build.</p></noscript>
+<h2>What about Vite+?</h2><p>Vite+ offers integrated scaffolding and tooling through <code>vp create</code>. Its built-in <code>vp dev</code> runs Vite; <code>vp run dev</code> runs a project's custom task. A backend still needs explicit execution and build choices. Compare it later when adding linting or a web client. <a href="https://viteplus.dev/guide/create">Create</a> · <a href="https://viteplus.dev/guide/run">Run</a>.</p>
+<h2>Keep generated files separate</h2><p>Add these patterns to the package's .gitignore. Commit an .env.example with placeholders when configuration arrives.</p>
+<pre><code class="language-plaintext">node_modules/
+dist/
+.env
+.env.*
+!.env.example</code></pre>
+<p>This exercise builds tests alongside application code to keep one configuration. A production package can later separate those outputs. A successful build does not establish production readiness. Primary reading: <a href="https://www.typescriptlang.org/docs/handbook/modules/theory.html">TypeScript modules</a>. Tomorrow, explain which command checks types, which watches files, and which code start executes.</p>
+<section class="worked-example" id="worked-example"><h2>Worked example: source and artifact diverge</h2><p>Assume the original source logs round A and you have already built it. Now edit only the source to log round B.</p><div class="table-scroll"><table><thead><tr><th>Action</th><th>Expected observation</th><th>Reason</th></tr></thead><tbody><tr><td>nub run start</td><td>round A</td><td>start reads the existing dist artifact.</td></tr><tr><td>nub run dev</td><td>round B</td><td>dev runs the changed source; stop it with Ctrl+C.</td></tr><tr><td>nub run typecheck</td><td>No output files change</td><td>--noEmit checks without building.</td></tr><tr><td>nub run build, then nub run start</td><td>round B</td><td>The build updates the artifact consumed by start.</td></tr></tbody></table></div><p><a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">TypeScript CLI source</a> · <a href="https://nubjs.com/docs/runtime">Nub runtime source</a>.</p></section><details class="practice-ladder" id="extra-practice"><summary>More practice: diagnose the workflow</summary><p>Use your own package after completing the main exercise. This is an optional second session.</p><h3>1. Predict</h3><p>After changing source, run typecheck without build. Which message should start print?</p><details><summary>Check</summary><p>The old built message. Typecheck emits nothing.</p></details><h3>2. Introduce and repair one type error</h3><p>After a successful build, pass a string to a numeric rule parameter. Run typecheck, then build. Record both diagnostics. Do not start the invalid source. Restore the valid call and rebuild.</p><details><summary>Expected observation</summary><p>Both checking and building fail; noEmitOnError prevents new output on the failed build. Previous artifacts may still exist, so their presence is not evidence of a successful current build.</p></details><h3>3. Add a meaningful test</h3><p>Add a test for a boundary that your current game rule has not covered, explain the expected result, and run nub run check. Temporarily change only the assertion’s expected value so the test fails; restore it afterward.</p><details><summary>Hint</summary><p>Use equality with the secret or a negative input if that is within your rule’s contract. Inspect the test failure rather than treating any output as success.</p></details><p>Success criteria: you can distinguish a compiler error from an assertion failure, identify which command refreshes dist, and explain which file start executes. Ask the agent to review your package scripts and observations.</p></details><footer><nav><a href="index.html">Course map</a> · <a href="0015-async.html">Previous: Async</a> · <a href="../reference/modeling-and-immutability.html">Modeling reference</a> · <a href="../reference/variables-and-collections.html">Variables and collections</a></nav><p>Ask the agent about anything unclear. Bring your local attempt for review; completing a reading alone does not establish mastery.</p></footer></body></html>

@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Reference · Modules and async</title><script src="../assets/theme.js"></script><link rel="stylesheet" href="../assets/course.css"><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/vendor/highlightjs/highlight.min.js" defer></script><script src="../assets/highlight.js" defer></script><script src="../assets/copy-code.js" defer></script><script src="../assets/quiz.js" defer></script></head><body><header><p class="eyebrow">Reference / JavaScript &amp; TypeScript foundations / About 10 minutes</p><h1>Modules &amp; asynchronous work</h1><p>Keep reusable logic in modules; await values that arrive through promises.</p></header><pre><code class="language-typescript">// messages.ts
+export type Turn = &quot;again&quot; | &quot;finished&quot;;
+
+export function nextTurn(lives: number): Turn {
+  return lives &gt; 0 ? &quot;again&quot; : &quot;finished&quot;;
+}
+
+// main.ts (a separate file beside messages.ts)
+import { nextTurn } from &quot;./messages&quot;;
+import type { Turn } from &quot;./messages&quot;;
+
+const turn: Turn = nextTurn(2);
+console.log(turn);</code></pre><p>Named imports use braces; default imports do not. Use import type for checking-only names. Nub supports these extensionless module paths. <a href="https://www.typescriptlang.org/docs/handbook/2/modules.html">Modules handbook</a>.</p><pre><code class="language-typescript">async function loadSecret(): Promise&lt;number&gt; {
+  return 7;
+}
+
+async function main(): Promise&lt;void&gt; {
+  console.log(&quot;before&quot;);
+  const secret = await loadSecret();
+  console.log(secret);
+}
+
+main().catch((error: unknown) =&gt; {
+  console.error(error);
+});
+console.log(&quot;outside&quot;);</code></pre><p>Async functions return promises. Await resumes with a fulfillment value or throws a rejection. Try/catch around awaited work handles that rejection; finally handles cleanup. Async does not offload CPU work. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">Promises</a>.</p><p>Await inside for...of sequences work. Promise.all coordinates independent work concurrently, without canceling siblings when one rejects. forEach does not await its async callbacks.</p><footer><a href="../lessons/0014-modules.html">Modules lesson</a> · <a href="../lessons/0015-async.html">Async lesson</a></footer></body></html>
