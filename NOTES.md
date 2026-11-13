@@ -10,4 +10,8 @@
 - User suggested learning through classic games. Have the learner implement meaningful code; provide hints and review rather than completing their exercises.
 - Proposed route: Guess the Number rules → Tic-Tac-Toe state → game API → persistence and concurrent requests. Adapt after evidence of understanding.
 - First lesson prepared, not completed. Do not record mastery until the user demonstrates it.
-- Existing devenv config enables Bun and TypeScript. Neither tool was established as available in the current shell; first lesson supports the TypeScript Playground without installation.
+- Bun and TypeScript are available in the current shell; use devenv shell if missing in future sessions.
+
+- User wants lessons to guide writing their own local code instead of using the TypeScript Playground. Use exercises/ files, small starters, hints, local type-check/run commands, and file review. Leave exercise implementations to the learner.
+
+- Add deferred assets/copy-code.js to every lesson and reference HTML document for copy buttons on code blocks.
