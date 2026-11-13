@@ -1,5 +1,8 @@
 # Teaching notes
 
+- Use a recurring D&D-inspired Adventurers’ Guild theme for new lessons and practice: encounters, inventory, spell slots, quests, and party state. Rules are explicitly defined teaching rules, not official D&D rules. Keep the backend mission and concept order; increase challenge through meaningful decisions and boundary cases rather than lore or unfamiliar syntax.
+- All lessons and examples must be well documented: explain purpose, inputs, outputs, assumptions, mutation, and surprising syntax; comment meaningful steps in worked code. Practice needs acceptance cases, progressive hints, and a clear local feedback loop. Leave solutions to the learner and do not infer mastery from curriculum changes.
+
 - Use local Highlight.js for syntax highlighting in all HTML artifacts: link `assets/highlight.css` after the course stylesheet, then defer `assets/vendor/highlightjs/highlight.min.js` and `assets/highlight.js` in that order. Mark TypeScript blocks with `class="language-typescript"`. Colors follow Latte/Mocha; no CDN is needed at viewing time.
 
 - Color preference: Catppuccin Latte for light mode and Catppuccin Mocha for dark mode, using the official palette. Shared course styles use mauve accents and blue links; print uses Latte text on white paper.
