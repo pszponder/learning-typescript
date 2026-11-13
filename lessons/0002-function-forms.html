@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lesson 02 · Same rule, different syntax</title><script src="../assets/theme.js"></script><link rel="stylesheet" href="../assets/course.css"><link rel="stylesheet" href="../assets/highlight.css"><script src="../assets/vendor/highlightjs/highlight.min.js" defer></script><script src="../assets/highlight.js" defer></script><script src="../assets/copy-code.js" defer></script><script src="../assets/quiz.js" defer></script></head><body><header><p class="eyebrow">02 / Guess the Number / About 8 minutes</p><h1>Same rule, different syntax</h1><p>Your win: refactor a typed game rule without changing its outcomes.</p></header>
+<p>Your first exercise passes strict type checking and produces all three expected results. Keep it as your baseline.</p>
+<h2>Choose a value with a ternary</h2>
+<pre><code class="language-typescript">// Inside a function, these two versions choose the same value:
+if (lives &gt; 0) {
+  return "again";
+} else {
+  return "finished";
+}
+
+// Ternary version:
+return lives &gt; 0 ? "again" : "finished";</code></pre>
+<p>Read <code>condition ? whenTrue : whenFalse</code> as “if the condition holds, choose the first value; otherwise choose the second.” A ternary is an expression, so it can follow return or an assignment; only the chosen branch is evaluated. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator">MDN: conditional operator</a>.</p>
+<p>Python comparison: <code>"again" if lives &gt; 0 else "finished"</code>. JavaScript puts the condition first. Keep branches when they make multiple steps easier to read.</p>
+<h2>Choose how to write the function</h2><pre><code class="language-typescript">type Turn = "again" | "finished";
+
+// Function declaration
+function nextTurn(lives: number): Turn {
+  return lives &gt; 0 ? "again" : "finished";
+}
+
+// Function expression assigned to a const
+const nextTurnExpression = function (lives: number): Turn {
+  return lives &gt; 0 ? "again" : "finished";
+};
+
+// Arrow function with a block body
+const nextTurnArrow = (lives: number): Turn =&gt; {
+  return lives &gt; 0 ? "again" : "finished";
+};
+
+// Arrow function with an expression body (implicit return)
+const nextTurnShort = (lives: number): Turn =&gt;
+  lives &gt; 0 ? "again" : "finished";</code></pre>
+<p><code>const</code> declares a binding that cannot be reassigned; the expression on its right creates the function. The arrow separates parameters from the body. The return annotation <code>: Turn</code> goes before the arrow. These examples behave alike for this rule. <a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#functions">TypeScript: function annotations</a>.</p>
+<aside><strong>Watch the braces.</strong> An expression body returns its value automatically. A block body needs an explicit <code>return</code> to return a value. Arrow functions use the surrounding <code>this</code>; unlike function declarations, these const functions cannot be called before initialization. We will revisit those distinctions when needed. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">MDN: arrow functions</a>.</aside>
+<h2>Predict before running</h2><pre><code class="language-typescript">const remaining = (lives: number) =&gt; { lives - 1; };
+console.log(remaining(3));</code></pre>
+<form data-quiz><fieldset><legend>What does this print?</legend>
+<label><input type="radio" name="result" data-feedback="Try again. A block body needs return to return a value."> <code>2</code></label>
+<label><input type="radio" name="result" data-feedback="Correct. The block evaluates lives - 1 but never returns it. Add return, or remove the braces."> <code>undefined</code></label>
+<label><input type="radio" name="result" data-feedback="Try again. The parameter is not returned either."> <code>3</code></label>
+</fieldset><button type="submit">Check prediction</button><p role="status" aria-live="polite"></p></form>
+<noscript><p>Answer: undefined. The block has no return statement.</p></noscript>
+<h2>Your turn: refactor your rule</h2><p>Copy your first exercise to <code>exercises/0002-function-forms.ts</code>. Make one change at a time and run after each:</p>
+<ol><li>Rewrite judgeGuess as a const arrow function with a block body. Keep your existing branches.</li><li>Keep the guess &gt; secret guard. Replace the remaining two outcomes with one returned ternary.</li><li>Keep the explicit GuessResult return annotation. Add a fourth call using negative numbers and predict its result.</li></ol>
+<pre><code>tsc --noEmit --strict exercises/0002-function-forms.ts
+bun run exercises/0002-function-forms.ts</code></pre>
+<details><summary>Hint: just the new signature</summary><pre><code class="language-typescript">const judgeGuess = (guess: number, secret: number): GuessResult =&gt; {
+  // Keep your rule here.
+};</code></pre></details>
+<p>You can represent three outcomes with nested ternaries, too. For this exercise, one guard followed by one ternary keeps the rule easy to scan. Write the implementation yourself and bring it back for review.</p>
+<h2>Recall tomorrow</h2><p>Without notes, recreate the block-body and expression-body arrows for nextTurn. Explain when return is required. Then reproduce your judgeGuess signature.</p>
+<footer><p>Primary reading: <a href="https://www.typescriptlang.org/docs/handbook/2/functions.html#function-type-expressions">Handbook: function type expressions</a>, stopping before call signatures. A function type describes a function; an arrow function expression creates one.</p><nav><a href="0001-guess-result.html">Previous lesson</a> · <a href="../reference/function-forms.html">Function forms cheat sheet</a></nav><p>Ask the agent about anything unclear, or request a review of your local exercise.</p></footer></body></html>
